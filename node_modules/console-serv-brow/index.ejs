@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <script src="public/libs/jquery/jquery.js"></script>
+    <script src="public/libs/bootstrap/js/bootstrap.js"></script>
+    <script src="public/libs/socket.io/dist/socket.io.js"></script>
+    <script src="public/libs/angular/angular.js"></script>
+    <script src="public/libs/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="public/libs/angular-socket-io/socket.js"></script>
+    <script src="public/libs/ng-json-explorer/src/angular-json-explorer.js"></script>
+    <link rel="stylesheet" href="public/libs/ng-json-explorer/src/angular-json-explorer.css">
+    <link rel="stylesheet" href="public/libs/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="public/css/style.css">
+    <script src="public/js/app.js"></script>
+    <script src="public/js/toString.js"></script>
+    <script src="public/directives/directives.js"></script>
+    <title>Console Server</title>
+</head>
+<body ng-app="console">
+    <div ng-controller="consoleCtrl">
+        <div class="row" style="margin-left: 10px">
+            <div class="col-md-6 col-lg-6 col-sm-6">
+                <console-log response-server="responseServer"></console-log>
+            </div>
+            <div class="col-md-6 col-lg-6 col-sm-6">
+                <console-error response-error="requestError"></console-error>
+                <console-request request-server="requestServer"></console-request>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
