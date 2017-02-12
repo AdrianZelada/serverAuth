@@ -40,6 +40,10 @@ router.get('/users', function(req, res, next) {
   //   res.json(response)
   // });
 
+  users.queryModel('7c8fad3e-9aa4-4c17-854a-ffab28284691').then(function (response) {
+      res.json(response)
+  })
+
 });
 
 module.exports = router;
