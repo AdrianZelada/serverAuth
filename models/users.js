@@ -3,7 +3,7 @@
  */
 // var parent = require('./models/parent-model');
 
-module.exports=function (parentx) {
+module.exports=function () {
     var parent = require('../models/parent-model');
     parent.call(this,'users');
 
