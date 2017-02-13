@@ -4,10 +4,11 @@
 var r = require('../db/db.js');
 var $q =require('q');
 
-module.exports=function () {
+module.exports=function (io) {
     var model='users';
     var parent = require('../models/parent-model');
     parent.call(this,model);
+
 
 
     this.queryModel=function (id) {
@@ -25,5 +26,5 @@ module.exports=function () {
     };
 
     return this;
-}();
+};
 
