@@ -7,11 +7,15 @@
 var r = require('../db/db.js');
 var $q = require('q');
 
-function parentModel (model){
+class parentModel{
 
-    this.$all     =   function(){
-        var defer = $q.defer();
-        r.table(model)
+    constructor (model){
+        this.model=model;
+    }
+
+    $all (){
+        let defer = $q.defer();
+        r.table(this.model)
             .orderBy(r.desc('createdAt'))
             .coerceTo('array')
             .run(r.conn)
@@ -20,15 +24,15 @@ function parentModel (model){
             })
             .catch(function (e) {
                 defer.reject(e)
-        });
+            });
 
         return defer.promise
-    };
+    }
 
-    this.$item       =   function(id,key){
-        var defer = $q.defer();
+    $item (id,key){
+        let defer = $q.defer();
 
-        r.table(model)
+        r.table(this.model)
             .filter(
                 r.row(key || 'id').eq(id)
             )
@@ -40,16 +44,16 @@ function parentModel (model){
             })
             .catch(function (e) {
                 defer.reject(e)
-        });
+            });
 
         return defer.promise;
-    };
+    }
 
-    this.$add       =   function(object){
+    $add (object){
         object.createdAt = r.now();
-        var defer = $q.defer();
+        let defer = $q.defer();
 
-        r.table(model)
+        r.table(this.model)
             .insert(object)
             .run(r.conn)
             .then(function (result) {
@@ -57,16 +61,16 @@ function parentModel (model){
             })
             .catch(function (e) {
                 defer.reject(e)
-        });
+            });
 
         return defer.promise;
-    };
+    }
 
-    this.$update    =  function(object){
+    $update (object){
 
-        var defer = $q.defer();
+        let defer = $q.defer();
 
-        r.table(model)
+        r.table(this.model)
             .filter(
                 r.row(object._key).eq(object[object._key])
             )
@@ -80,13 +84,13 @@ function parentModel (model){
             });
 
         return defer.promise;
-    };
+    }
 
-    this.$delete    =   function(id){
+    $delete  (id){
 
-        var defer = $q.defer();
+        let defer = $q.defer();
 
-        r.table(model)
+        r.table(this.model)
             .get(id)
             .delete()
             .run(r.conn)
@@ -98,14 +102,7 @@ function parentModel (model){
             });
 
         return defer.promise;
-    };
-
-
-    function handleError(res) {
-        return function(error) {
-            return res.status(500).json({error: error});
-        }
     }
 }
 
-module.exports= parentModel;
+module.exports = parentModel
