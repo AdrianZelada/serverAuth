@@ -4,8 +4,8 @@
 /**
  * Created by izel on 30-08-16.
  */
-var r = require('../db/db.js');
-var $q = require('q');
+import r from '../db/db.js';
+import $q from 'q';
 
 class parentModel{
 

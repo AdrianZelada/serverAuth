@@ -1,9 +1,9 @@
 /**
  * Created by iZel on 2/12/17.
  */
-var r = require('../db/db.js');
-var $q =require('q');
-var parentModel= require('../models/parent-model');
+import r from '../db/db.js';
+import $q from 'q';
+import parentModel from '../models/parent-model';
 
 
 class user extends parentModel{
