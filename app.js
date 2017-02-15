@@ -15,10 +15,20 @@ var io = require('socket.io')(server);
 var index = require('./routes/index'),
     users = require('./routes/users')(io);
 
-require('console-serv-brow')(app,{
-  pathRoute:'/logs' ,
-  log:console
+
+
+require('./bin/authenticate')(app,{
+    authentication:true,
+    expiration:{
+      status:false,
+      time:100000
+    },
+    fixedToken:false,
+    withoutToken:['/logs/'],
+    stateRedirect:[]
 });
+
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -30,6 +40,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// app.use('/logs',express.static(path.join(__dirname, 'node_modules/console-serv-brow')));
+require('console-serv-brow')(app,{
+    pathRoute:'/logs' ,
+    log:console
+});
+
+
 app.use('/', index);
 app.use('/users', users);
 
@@ -48,6 +65,11 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+
+
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

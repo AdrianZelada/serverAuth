@@ -17,6 +17,11 @@ function routerUser(io){
         res.send('complete')
       })
     });
+
+
+    router.get('/jsonTest', function(req, res) {
+        res.json({name:'Adrian'})
+    });
     return router;
 }
 
