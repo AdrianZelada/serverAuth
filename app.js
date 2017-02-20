@@ -3,7 +3,10 @@ var express = require('express'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
+    r = require('./db/db'),
     bodyParser = require('body-parser');
+
+
 
 
 // view engine setup
@@ -20,13 +23,29 @@ var index = require('./routes/index'),
 require('./bin/authenticate')(app,{
     authentication:true,
     expiration:{
-      status:false,
+      status:true,
       time:100000
     },
     fixedToken:false,
-    withoutToken:['/logs/'],
-    stateRedirect:[]
+    withoutToken:['/logs/','/users/usersAuth'],
+    stateRedirect:[],
+    callbackAuth:function (auth,token) {
+        r.table('users')
+            .filter(r.row('token').eq(token))
+            .coerceTo('array')
+            .run(r.conn)
+            .then((result) => {
+                if (result.length > 0) {
+                    auth(result[0]);
+                }else{
+                    auth();
+                }
+            })
+    }
+
 });
+
+
 
 
 

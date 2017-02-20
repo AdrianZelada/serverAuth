@@ -18,7 +18,11 @@ var defaults={
     ],
     tableToken:'users',
     withoutToken:[],
-    stateRedirect:[]
+    stateRedirect:[],
+    header:'x-access-token',
+    callbackAuth:function () {
+    }
+
 };
 
 module.exports=function (app,options) {
@@ -35,13 +39,13 @@ module.exports=function (app,options) {
 
         app.use(function(req, res, next){
 
-            if(req.accepts()[0]!='text/html' && req.get('Content-Type') != 'application/json'){
+            if(req.get('Content-Type') != 'application/json'){
                 next();
             }else{
                 if(settings.withoutToken.indexOf(req.path)!=-1){
                     next();
                 }else {
-                    let token = req.headers['x-access-token'];
+                    let token = req.headers[settings.header];
                     if (token) {
                         if (settings.fixedToken) {
                             if (tokens.indexOf(token) != -1) {
@@ -50,29 +54,33 @@ module.exports=function (app,options) {
                                 redirecToError(res);
                             }
                         } else {
-                            r.table(settings.tableToken)
-                                .filter(r.row('token').eq(token))
-                                .coerceTo('array')
-                                .run(r.conn)
-                                .then((result) => {
-                                    if (result.length > 0) {
-                                        if (settings.expiration.status) {
-                                            jwt.verify(token, config.cert, function (err, decode) {
-                                                if (err) {
-                                                    expiredToken(res, err)
-                                                } else {
-                                                    next()
-                                                }
-                                            });
-                                        } else {
-                                            next();
-                                        }
-                                    } else {
-                                        redirecToError(res)
-                                    }
-                                }).catch((e) => {
-                                redirecToError(res)
-                            })
+
+                            settings.callbackAuth(Auth(next,token,res),token);
+
+
+                            // r.table(settings.tableToken)
+                            //     .filter(r.row('token').eq(token))
+                            //     .coerceTo('array')
+                            //     .run(r.conn)
+                            //     .then((result) => {
+                            //         if (result.length > 0) {
+                            //             if (settings.expiration.status) {
+                            //                 jwt.verify(token, config.cert, function (err, decode) {
+                            //                     if (err) {
+                            //                         expiredToken(res, err)
+                            //                     } else {
+                            //                         next()
+                            //                     }
+                            //                 });
+                            //             } else {
+                            //                 next();
+                            //             }
+                            //         } else {
+                            //             redirecToError(res)
+                            //         }
+                            //     }).catch((e) => {
+                            //     redirecToError(res)
+                            // })
                         }
                     } else {
                         redirecToError(res);
@@ -95,5 +103,27 @@ module.exports=function (app,options) {
             message: 'Token expired',
             error:error
         });
+    };
+
+
+    function Auth (next,token,res){
+        return function (user) {
+            if(user){
+                if (settings.expiration.status) {
+                    console.log('expiration verifity')
+                    jwt.verify(token, config.cert, function (err, decode) {
+                        if (err) {
+                            expiredToken(res, err)
+                        } else {
+                            next()
+                        }
+                    });
+                } else {
+                    next();
+                }
+            }else{
+                redirecToError(res)
+            }
+        }
     }
 };

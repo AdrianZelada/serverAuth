@@ -53,6 +53,7 @@ class parentModel{
         object.createdAt = r.now();
         let defer = $q.defer();
 
+        console.log(object)
         r.table(this.model)
             .insert(object)
             .run(r.conn)

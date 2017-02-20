@@ -6,5 +6,6 @@
 
 module.exports={
     authentication:true,
-    cert:'shhhh'
+    cert:'shhhh',
+    expTime:10000
 };

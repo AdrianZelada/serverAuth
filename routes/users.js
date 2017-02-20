@@ -19,6 +19,15 @@ function routerUser(io){
     });
 
 
+    router.post('/usersAuth',   function (req, res) {
+        let user=req.body;
+
+        // res.json(user)
+        users.$addUser(user,res);
+    });
+
+
+
     router.get('/jsonTest', function(req, res) {
         res.json({name:'Adrian'})
     });
