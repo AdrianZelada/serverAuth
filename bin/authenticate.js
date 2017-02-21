@@ -38,8 +38,8 @@ module.exports=function (app,options) {
         });
 
         app.use(function(req, res, next){
-
-            if(req.get('Content-Type') != 'application/json'){
+            if(req.accepts()[0]!='text/html' && req.get('Content-Type') != 'application/json'){
+            // if(req.get('Content-Type') != 'application/json'){
                 next();
             }else{
                 if(settings.withoutToken.indexOf(req.path)!=-1){
