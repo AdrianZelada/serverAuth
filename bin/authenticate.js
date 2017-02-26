@@ -56,31 +56,6 @@ module.exports=function (app,options) {
                         } else {
 
                             settings.callbackAuth(Auth(next,token,res),token);
-
-
-                            // r.table(settings.tableToken)
-                            //     .filter(r.row('token').eq(token))
-                            //     .coerceTo('array')
-                            //     .run(r.conn)
-                            //     .then((result) => {
-                            //         if (result.length > 0) {
-                            //             if (settings.expiration.status) {
-                            //                 jwt.verify(token, config.cert, function (err, decode) {
-                            //                     if (err) {
-                            //                         expiredToken(res, err)
-                            //                     } else {
-                            //                         next()
-                            //                     }
-                            //                 });
-                            //             } else {
-                            //                 next();
-                            //             }
-                            //         } else {
-                            //             redirecToError(res)
-                            //         }
-                            //     }).catch((e) => {
-                            //     redirecToError(res)
-                            // })
                         }
                     } else {
                         redirecToError(res);

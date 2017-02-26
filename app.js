@@ -42,7 +42,6 @@ require('./bin/authenticate')(app,{
                 }
             })
     }
-
 });
 
 
